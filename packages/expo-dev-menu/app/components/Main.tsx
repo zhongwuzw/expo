@@ -61,18 +61,14 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
             <Spacer.Horizontal size="medium" />
             <Row align="center" shrink="1">
               <Spacer.Horizontal size="small" />
-
               <View shrink="1">
                 <Row style={{ flexWrap: 'wrap' }}>
                   <Heading weight="bold" numberOfLines={1}>
                     {appInfo?.appName}
                   </Heading>
                 </Row>
-
               </View>
-
               <Spacer.Horizontal />
-
               <View width="large" style={{ alignSelf: 'flex-start' }}>
                 <Button.FadeOnPressContainer onPress={hideMenu} bg="ghost" rounded="full">
                   <View padding="micro">
@@ -80,38 +76,35 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
                   </View>
                 </Button.FadeOnPressContainer>
               </View>
-
               <Spacer.Horizontal size="small" />
             </Row>
           </Row>
         </View>
-
-        <Divider />
         <View style={{}}>
           <ScrollView nestedScrollEnabled>
             <View margin="small">
               <View bg="default" rounded="large" overflow="hidden">
-                <SettingsRowButton label="Reload" icon={<RefreshIcon />} onPress={actions.reload} />
-                <Divider />
+                <SettingsRowButton label="Reload" icon={<RefreshIcon />} onPress={actions.reload} showArrow />
                 <SettingsRowButton
                   label="Share project link"
                   icon={<ClipboardIcon />}
                   onPress={onShareProjectLinkPress}
                   description={projectLinkClipboard.hasCopied ? 'Copied!' : undefined}
+                  showArrow
                 />
-                <Divider />
                 <SettingsRowButton
                   label="Hide menu button"
                   icon={<DebugIcon />}
                   onPress={onHideMenuButtonPress}
+                  showArrow
                 />
                 {isDevLauncherInstalled && (
                   <>
-                    <Divider />
                     <SettingsRowButton
                       label="Go home"
                       icon={<HomeFilledIcon tintColor={lightTheme.icon.default} />}
                       onPress={actions.navigateToLauncher}
+                      showArrow
                     />
                   </>
                 )}
@@ -138,7 +131,8 @@ function SettingsRowButton({
   description = '',
   onPress,
   disabled,
-}: SettingsRowButtonProps) {
+  showArrow
+}: SettingsRowButtonProps & { showArrow?: boolean }) {
   return (
     <Button.FadeOnPressContainer onPress={onPress} bg="default" disabled={disabled}>
       <Row padding="small" align="center" bg="default" style={{ opacity: disabled ? 0.75 : 1 }}>
@@ -156,7 +150,12 @@ function SettingsRowButton({
 
         <Spacer.Horizontal />
 
-        <View width="16" style={{ alignItems: 'flex-end' }} />
+        {showArrow && (
+          <View width="large" style={{ alignItems: 'flex-end' }}>
+            <Text style={{ fontSize: 18, color: '#B0B0B0' }}>{'>'}</Text>
+          </View>
+        )}
+        {!showArrow && <View width="16" style={{ alignItems: 'flex-end' }} />}
       </Row>
 
       {Boolean(description) && (
