@@ -126,69 +126,6 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
         <Divider />
         <View style={{ flex: 1 }}>
           <ScrollView nestedScrollEnabled>
-            {Boolean(appInfo?.hostUrl) && (
-              <>
-                <View bg="default" padding="medium">
-                  <Text color="secondary">Connected to:</Text>
-
-                  <Spacer.Vertical size="small" />
-                  <Button.FadeOnPressContainer
-                    bg="default"
-                    onPress={onCopyUrlPress}
-                    testID="main.copyUrlButton">
-                    <Row align="center">
-                      <StatusIndicator style={{ width: 10, height: 10 }} status="success" />
-                      <Spacer.Horizontal size="small" />
-                      <Row flex="1" justify="between">
-                        <Text type="mono" numberOfLines={2} size="small">
-                          {appInfo?.hostUrl}
-                        </Text>
-
-                        <ClipboardIcon />
-                      </Row>
-                      <Spacer.Horizontal size="small" />
-                    </Row>
-                  </Button.FadeOnPressContainer>
-                </View>
-
-                <Divider />
-              </>
-            )}
-
-            {registeredCallbacks.length > 0 && (
-              <View>
-                <View mx="large">
-                  <Heading size="small" color="secondary">
-                    Custom Menu Items
-                  </Heading>
-                </View>
-
-                <Spacer.Vertical size="small" />
-
-                <View mx="small">
-                  {registeredCallbacks.map((name, index, arr) => {
-                    const isFirst = index === 0;
-                    const isLast = index === arr.length - 1;
-                    const onPress = () => fireCallbackAsync(name);
-
-                    return (
-                      <View key={name + index}>
-                        <View
-                          bg="default"
-                          roundedTop={isFirst ? 'large' : 'none'}
-                          roundedBottom={isLast ? 'large' : 'none'}>
-                          <SettingsRowButton label={name} icon={null} onPress={onPress} />
-                        </View>
-                        {!isLast && <Divider />}
-                      </View>
-                    );
-                  })}
-                </View>
-
-                <Spacer.Vertical size="medium" />
-              </View>
-            )}
-
             <View margin="small">
               <View
                 {...(isDevLauncherInstalled ? { roundedTop: 'large' } : { rounded: 'large' })}
@@ -209,76 +146,6 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
               )}
             </View>
 
-            <View mx="small">
-              <View bg="default" roundedTop="large">
-                <SettingsRowButton
-                  disabled={!devSettings.isPerfMonitorAvailable}
-                  label="Toggle performance monitor"
-                  icon={<PerformanceIcon />}
-                  onPress={actions.togglePerformanceMonitor}
-                />
-              </View>
-              <Divider />
-              <View bg="default">
-                <SettingsRowButton
-                  disabled={!devSettings.isElementInspectorAvailable}
-                  label="Toggle element inspector"
-                  icon={<InspectElementIcon />}
-                  onPress={actions.toggleElementInspector}
-                />
-              </View>
-              <Divider />
-              {devSettings.isJSInspectorAvailable && (
-                <View bg="default">
-                  <SettingsRowButton
-                    disabled={!devSettings.isJSInspectorAvailable}
-                    label="Open JS debugger"
-                    icon={<DebugIcon />}
-                    onPress={actions.openJSInspector}
-                  />
-                </View>
-              )}
-              <Divider />
-              <View bg="default" roundedBottom="large">
-                <SettingsRowSwitch
-                  disabled={!devSettings.isHotLoadingAvailable}
-                  testID="fast-refresh"
-                  label="Fast refresh"
-                  icon={<RunIcon />}
-                  isEnabled={devSettings.isHotLoadingEnabled}
-                  setIsEnabled={actions.toggleFastRefresh}
-                />
-              </View>
-            </View>
-
-            {appInfo?.engine === 'Hermes' && (
-              <>
-                <Spacer.Vertical size="large" />
-
-                <View mx="small">
-                  <View bg="warning" padding="medium" rounded="medium" border="warning">
-                    <Row align="center">
-                      <WarningIcon />
-
-                      <Spacer.Horizontal size="tiny" />
-
-                      <Heading color="warning" size="small" style={{ top: 1 }}>
-                        Warning
-                      </Heading>
-                    </Row>
-
-                    <Spacer.Vertical size="small" />
-
-                    <View>
-                      <Text size="small" color="warning">
-                        Debugging not working? Try manually reloading first
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </>
-            )}
-
             {!hasDisabledDevSettingOption && (
               <>
                 <Spacer.Vertical size="large" />
@@ -287,55 +154,6 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
                 </Text>
               </>
             )}
-
-            <Spacer.Vertical size="large" />
-
-            <View mx="small" rounded="large" overflow="hidden">
-              <AppInfoRow title="Version" value={appInfo?.appVersion || 'Unknown'} />
-              <Divider />
-              {Boolean(appInfo?.runtimeVersion) && (
-                <>
-                  <AppInfoRow
-                    title="Runtime version"
-                    value={appInfo?.runtimeVersion || 'Unknown'}
-                  />
-                  <Divider />
-                </>
-              )}
-
-              {Boolean(appInfo?.sdkVersion) && !appInfo?.runtimeVersion && (
-                <>
-                  <AppInfoRow title="SDK Version" value={appInfo?.sdkVersion || 'Unknown'} />
-                  <Divider />
-                </>
-              )}
-
-              <Button.FadeOnPressContainer
-                bg="default"
-                roundedTop="none"
-                roundedBottom="large"
-                onPress={onCopyAppInfoPress}
-                disabled={hasCopiedAppInfoContent}>
-                <Row px="medium" py="small" align="center" bg="default">
-                  <Text color="link" size="medium">
-                    {hasCopiedAppInfoContent ? 'Copied to clipboard!' : 'Tap to Copy All'}
-                  </Text>
-                </Row>
-              </Button.FadeOnPressContainer>
-            </View>
-
-            <Spacer.Vertical size="large" />
-            <View mx="small" rounded="large" overflow="hidden">
-              <Button.FadeOnPressContainer
-                bg="default"
-                roundedTop="none"
-                roundedBottom="large"
-                onPress={actions.openRNDevMenu}>
-                <Row px="medium" py="small" align="center" bg="default">
-                  <Text>Open React Native dev menu</Text>
-                </Row>
-              </Button.FadeOnPressContainer>
-            </View>
 
             {Platform.OS === 'android' && <View style={{ height: 50 }} />}
             <Spacer.Vertical size="large" />
