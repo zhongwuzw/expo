@@ -21,7 +21,7 @@ import {
   scale,
 } from 'expo-dev-client-components';
 import * as React from 'react';
-import { Platform, ScrollView, Switch } from 'react-native';
+import { Platform, ScrollView } from 'react-native';
 
 import { Onboarding } from './Onboarding';
 import { SafeAreaView } from '../../vendored/react-native-safe-area-context/src';
@@ -29,7 +29,7 @@ import { useAppInfo } from '../hooks/useAppInfo';
 import { useClipboard } from '../hooks/useClipboard';
 import { useDevSettings } from '../hooks/useDevSettings';
 import { isDevLauncherInstalled } from '../native-modules/DevLauncher';
-import { hideMenu, fireCallbackAsync } from '../native-modules/DevMenu';
+import { hideMenu } from '../native-modules/DevMenu';
 
 type MainProps = {
   registeredCallbacks?: string[];
@@ -40,28 +40,17 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
   const appInfo = useAppInfo();
   const { devSettings, actions } = useDevSettings();
 
-  const urlClipboard = useClipboard();
-  const appInfoClipboard = useClipboard();
+  const projectLinkClipboard = useClipboard();
 
-  function onCopyUrlPress() {
+  function onShareProjectLinkPress() {
     if (appInfo?.hostUrl) {
-      urlClipboard.onCopyPress(appInfo.hostUrl);
+      projectLinkClipboard.onCopyPress(appInfo.hostUrl);
     }
   }
 
-  function onCopyAppInfoPress() {
-    const { runtimeVersion, sdkVersion, appName, appVersion } = appInfo || {};
-    appInfoClipboard.onCopyPress({ runtimeVersion, sdkVersion, appName, appVersion });
+  function onHideMenuButtonPress() {
+    console.log('Hide menu button pressed');
   }
-
-  const hasCopiedAppInfoContent = Boolean(appInfoClipboard.clipboardContent);
-
-  const { isElementInspectorAvailable, isHotLoadingAvailable, isPerfMonitorAvailable } =
-    devSettings;
-  const hasDisabledDevSettingOption =
-    [isElementInspectorAvailable, isHotLoadingAvailable, isPerfMonitorAvailable].filter(
-      (value) => value === false
-    ).length > 0;
 
   return (
     <View flex="1" bg="secondary">
@@ -127,39 +116,34 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
         <View style={{ flex: 1 }}>
           <ScrollView nestedScrollEnabled>
             <View margin="small">
-              <View
-                {...(isDevLauncherInstalled ? { roundedTop: 'large' } : { rounded: 'large' })}
-                bg="default">
+              <View bg="default" rounded="large" overflow="hidden">
                 <SettingsRowButton label="Reload" icon={<RefreshIcon />} onPress={actions.reload} />
-              </View>
-              {isDevLauncherInstalled && (
-                <>
-                  <Divider />
-                  <View roundedBottom="large" bg="default">
+                <Divider />
+                <SettingsRowButton
+                  label="Share project link"
+                  icon={<ClipboardIcon />}
+                  onPress={onShareProjectLinkPress}
+                  description={projectLinkClipboard.hasCopied ? 'Copied!' : undefined}
+                />
+                <Divider />
+                <SettingsRowButton
+                  label="Hide menu button"
+                  icon={<DebugIcon />}
+                  onPress={onHideMenuButtonPress}
+                />
+                {isDevLauncherInstalled && (
+                  <>
+                    <Divider />
                     <SettingsRowButton
                       label="Go home"
                       icon={<HomeFilledIcon tintColor={lightTheme.icon.default} />}
                       onPress={actions.navigateToLauncher}
                     />
-                  </View>
-                </>
-              )}
+                  </>
+                )}
+              </View>
             </View>
-
-            {!hasDisabledDevSettingOption && (
-              <>
-                <Spacer.Vertical size="large" />
-                <Text size="small" color="secondary" align="center">
-                  Some settings are unavailable for this development build.
-                </Text>
-              </>
-            )}
-
-            {Platform.OS === 'android' && <View style={{ height: 50 }} />}
-            <Spacer.Vertical size="large" />
           </ScrollView>
-
-          <Onboarding isDevice={isDevice} />
         </View>
       </SafeAreaView>
     </View>
@@ -218,88 +202,5 @@ function SettingsRowButton({
         </View>
       )}
     </Button.FadeOnPressContainer>
-  );
-}
-
-type SettingsRowSwitchProps = {
-  icon: React.ReactElement<any>;
-  label: string;
-  description?: string;
-  isEnabled?: boolean;
-  setIsEnabled: (isEnabled: boolean) => void;
-  testID: string;
-  disabled?: boolean;
-};
-
-function SettingsRowSwitch({
-  label,
-  description = '',
-  icon,
-  isEnabled,
-  setIsEnabled,
-  disabled,
-  testID,
-}: SettingsRowSwitchProps) {
-  return (
-    <View style={{ opacity: disabled ? 0.75 : 1 }} pointerEvents={disabled ? 'none' : 'auto'}>
-      <Row padding="small" align="center">
-        <View width="large" height="large">
-          {icon}
-        </View>
-
-        <Spacer.Horizontal size="small" />
-
-        <View>
-          <Text>{label}</Text>
-        </View>
-
-        <Spacer.Horizontal />
-
-        <View width="16" style={{ alignItems: 'flex-end' }}>
-          <Switch
-            testID={testID}
-            disabled={disabled}
-            value={isEnabled && !disabled}
-            onValueChange={() => setIsEnabled(!isEnabled)}
-          />
-        </View>
-      </Row>
-
-      {Boolean(description) && (
-        <View style={{ transform: [{ translateY: -8 }] }}>
-          <Row px="small" align="center">
-            <Spacer.Horizontal size="large" />
-
-            <View shrink="1" px="small">
-              <Text size="small" color="secondary" leading="large">
-                {description}
-              </Text>
-            </View>
-
-            <View style={{ width: scale[16] }} />
-          </Row>
-          <Spacer.Vertical size="tiny" />
-        </View>
-      )}
-    </View>
-  );
-}
-
-type AppInfoRowProps = {
-  title: string;
-  value: string;
-};
-
-function AppInfoRow({ title, value }: AppInfoRowProps) {
-  return (
-    <Row px="medium" py="small" align="center" bg="default" justify="between" flex="1">
-      <Text size="medium">{title}</Text>
-      <Spacer.Horizontal size="small" />
-      <View style={{ flex: 1, alignItems: 'flex-end' }}>
-        <Text size="medium" numberOfLines={2}>
-          {value}
-        </Text>
-      </View>
-    </Row>
   );
 }
