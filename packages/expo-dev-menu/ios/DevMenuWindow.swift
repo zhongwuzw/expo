@@ -49,6 +49,17 @@ class DevMenuWindow: UIWindow, OverlayContainerViewControllerDelegate {
   override func becomeKey() {
     // We set up the background of the RN root view to mask all artifacts caused by Yoga when the bottom sheet is dragged.
     devMenuViewController.view.backgroundColor = UIColor(red: 0.97, green: 0.97, blue: 0.98, alpha: 1)
+      
+      let cornerRadius: CGFloat = 10.0
+      
+      devMenuViewController.view.clipsToBounds = true
+      
+      devMenuViewController.view.layer.cornerRadius = cornerRadius
+      
+      devMenuViewController.view.layer.maskedCorners = [
+        .layerMinXMinYCorner,
+        .layerMaxXMinYCorner
+      ]
 
     devMenuViewController.updateProps()
     bottomSheetController.moveOverlay(toNotchAt: OverlayNotch.open.rawValue, animated: true)
@@ -99,7 +110,7 @@ class DevMenuWindow: UIWindow, OverlayContainerViewControllerDelegate {
     // In order to avoid crashing the app because of returning a negative value make sure that the returned value is >= 0.
     return max(availableSpace - 45, 0)
     case .open:
-      return availableSpace * 0.6
+      return availableSpace * 0.4
     case .hidden:
       return 0
     }

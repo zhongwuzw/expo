@@ -56,21 +56,10 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
     <View flex="1" bg="secondary">
       {/*Use default edges for android, do not enable for iOS*/}
       <SafeAreaView style={{ flex: 1 }} edges={Platform.OS === 'android' ? undefined : []}>
-        <View py="medium" bg="default">
+        <View py="medium" bg="default" roundedTop="large">
           <Row align="start">
             <Spacer.Horizontal size="medium" />
             <Row align="center" shrink="1">
-              <View>
-                <View height="xl" width="xl" overflow="hidden" bg="secondary" rounded="medium">
-                  {Boolean(appInfo?.appIcon) && (
-                    <Image
-                      source={{ uri: appInfo?.appIcon }}
-                      style={{ flex: 1, resizeMode: 'contain' }}
-                    />
-                  )}
-                </View>
-              </View>
-
               <Spacer.Horizontal size="small" />
 
               <View shrink="1">
@@ -80,21 +69,6 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
                   </Heading>
                 </Row>
 
-                {Boolean(appInfo?.runtimeVersion) && (
-                  <>
-                    <Text size="small" color="secondary">
-                      {`Runtime version: ${appInfo?.runtimeVersion}`}
-                    </Text>
-                  </>
-                )}
-
-                {Boolean(appInfo?.sdkVersion) && !appInfo?.runtimeVersion && (
-                  <>
-                    <Text size="small" color="secondary">
-                      {`SDK version: ${appInfo?.sdkVersion}`}
-                    </Text>
-                  </>
-                )}
               </View>
 
               <Spacer.Horizontal />
@@ -113,7 +87,7 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
         </View>
 
         <Divider />
-        <View style={{ flex: 1 }}>
+        <View style={{}}>
           <ScrollView nestedScrollEnabled>
             <View margin="small">
               <View bg="default" rounded="large" overflow="hidden">
