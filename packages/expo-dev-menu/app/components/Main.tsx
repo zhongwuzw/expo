@@ -19,6 +19,7 @@ import {
   StatusIndicator,
   Image,
   scale,
+  width,
 } from 'expo-dev-client-components';
 import * as React from 'react';
 import { Platform, ScrollView, StyleSheet } from 'react-native';
@@ -31,6 +32,7 @@ import { useDevSettings } from '../hooks/useDevSettings';
 import { isDevLauncherInstalled } from '../native-modules/DevLauncher';
 import { hideMenu } from '../native-modules/DevMenu';
 import { RefreshCcw, Share, EyeOff, House } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 type MainProps = {
   registeredCallbacks?: string[];
@@ -134,7 +136,14 @@ function SettingsRowButton({
     <Button.FadeOnPressContainer onPress={onPress} bg="default" disabled={disabled}>
       <Row padding="small" align="center" bg="default" style={{ opacity: disabled ? 0.75 : 1 }}>
         {icon && (
-          <View width="large" height="large">
+          <View
+            width="large"
+            height="large"
+            bg="secondary"
+            rounded="medium"
+            alignItems="center"
+            justifyContent="center"
+            style={{ marginRight: scale.small }}>
             {icon}
           </View>
         )}
@@ -149,7 +158,7 @@ function SettingsRowButton({
 
         {showArrow && (
           <View width="large" style={{ alignItems: 'flex-end' }}>
-            <Text style={{ fontSize: 18, color: '#B0B0B0' }}>{'>'}</Text>
+            <Ionicons name="chevron-forward" size={{ width: 7.5, height: 13.13 }} color="#838383" />
           </View>
         )}
         {!showArrow && <View width="16" style={{ alignItems: 'flex-end' }} />}
