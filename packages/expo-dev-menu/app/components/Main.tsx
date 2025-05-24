@@ -175,7 +175,7 @@ function SettingsRowButton({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#0000000D',
+    backgroundColor: '#EFEFF0',
   },
   safeArea: {
     flex: 1,
