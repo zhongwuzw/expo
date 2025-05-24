@@ -9,7 +9,7 @@ type LoadInitialDataProps = {
   loader?: React.ReactElement<any>;
 };
 
-export function LoadInitialData({ children, loader = <Splash /> }: LoadInitialDataProps) {
+export function LoadInitialData({ children, loader = null }: LoadInitialDataProps) {
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
