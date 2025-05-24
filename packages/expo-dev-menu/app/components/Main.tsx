@@ -31,7 +31,7 @@ import { useClipboard } from '../hooks/useClipboard';
 import { useDevSettings } from '../hooks/useDevSettings';
 import { isDevLauncherInstalled } from '../native-modules/DevLauncher';
 import { hideMenu } from '../native-modules/DevMenu';
-import { RefreshCcw, Share, EyeOff, House } from 'lucide-react-native';
+import { RefreshCcw, Share, EyeOff, House, Info } from 'lucide-react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 type MainProps = {
@@ -55,11 +55,12 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
     <View flex="1" style={{backgroundColor: "#0000000D"}}>
       {/*Use default edges for android, do not enable for iOS*/}
       <SafeAreaView style={{ flex: 1 }} edges={Platform.OS === 'android' ? undefined : []}>
-        <View py="medium" roundedTop="large">
-          <Row align="start">
-            <Spacer.Horizontal size="medium" />
+        <View style={{paddingVertical: 6, borderTopLeftRadius: 10, borderTopRightRadius: 10}} alignItems="center">
+          <View style={{width: 35, height: 4, backgroundColor: '#00000033', borderRadius: 2, marginBottom: 10}} />
+          <Row align="start" style={{paddingHorizontal: 16}}>
+            {/* <Spacer.Horizontal size="medium" /> */}
             <Row align="center" shrink="1">
-              <Spacer.Horizontal size="small" />
+              {/* <Spacer.Horizontal size="small" /> */}
               <View shrink="1">
                 <Row style={{ flexWrap: 'wrap' }}>
                   <Text style={styles.headerTitle} numberOfLines={1}>
@@ -76,7 +77,7 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
                   </View>
                 </Button.FadeOnPressContainer>
               </View>
-              <Spacer.Horizontal size="small" />
+              {/* <Spacer.Horizontal size="small" /> */}
             </Row>
           </Row>
         </View>
@@ -112,6 +113,13 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
             </View>
           </ScrollView>
         </View>
+        <View style={{paddingHorizontal: 12, paddingTop:10}}>
+            <Row align="center">
+              <Info size={16} color="#838383" />
+              <Spacer.Horizontal size="small" />
+              <Text style={{fontWeight:'400', fontSize:16, color:"#4D4D4D"}}>Shake device to open this menu</Text>
+            </Row>
+          </View>
       </SafeAreaView>
     </View>
   );

@@ -110,7 +110,7 @@ class DevMenuWindow: UIWindow, OverlayContainerViewControllerDelegate {
     // In order to avoid crashing the app because of returning a negative value make sure that the returned value is >= 0.
     return max(availableSpace - 45, 0)
     case .open:
-      return availableSpace * 0.4
+      return availableSpace * 0.45
     case .hidden:
       return 0
     }
