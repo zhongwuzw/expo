@@ -21,7 +21,7 @@ import {
   scale,
 } from 'expo-dev-client-components';
 import * as React from 'react';
-import { Platform, ScrollView } from 'react-native';
+import { Platform, ScrollView, StyleSheet } from 'react-native';
 
 import { Onboarding } from './Onboarding';
 import { SafeAreaView } from '../../vendored/react-native-safe-area-context/src';
@@ -30,6 +30,7 @@ import { useClipboard } from '../hooks/useClipboard';
 import { useDevSettings } from '../hooks/useDevSettings';
 import { isDevLauncherInstalled } from '../native-modules/DevLauncher';
 import { hideMenu } from '../native-modules/DevMenu';
+import { RefreshCcw, Share, EyeOff, House } from 'lucide-react-native';
 
 type MainProps = {
   registeredCallbacks?: string[];
@@ -48,24 +49,20 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
     }
   }
 
-  function onHideMenuButtonPress() {
-    console.log('Hide menu button pressed');
-  }
-
   return (
-    <View flex="1" bg="secondary">
+    <View flex="1" style={{backgroundColor: "#0000000D"}}>
       {/*Use default edges for android, do not enable for iOS*/}
       <SafeAreaView style={{ flex: 1 }} edges={Platform.OS === 'android' ? undefined : []}>
-        <View py="medium" bg="default" roundedTop="large">
+        <View py="medium" roundedTop="large">
           <Row align="start">
             <Spacer.Horizontal size="medium" />
             <Row align="center" shrink="1">
               <Spacer.Horizontal size="small" />
               <View shrink="1">
                 <Row style={{ flexWrap: 'wrap' }}>
-                  <Heading weight="bold" numberOfLines={1}>
+                  <Text style={styles.headerTitle} numberOfLines={1}>
                     {appInfo?.appName}
-                  </Heading>
+                  </Text>
                 </Row>
               </View>
               <Spacer.Horizontal />
@@ -80,29 +77,29 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
             </Row>
           </Row>
         </View>
-        <View style={{}}>
+        <View >
           <ScrollView nestedScrollEnabled>
             <View margin="small">
               <View bg="default" rounded="large" overflow="hidden">
-                <SettingsRowButton label="Reload" icon={<RefreshIcon />} onPress={actions.reload} showArrow />
+                <SettingsRowButton label="Reload" icon={<RefreshCcw size={16} />} onPress={actions.reload} showArrow />
                 <SettingsRowButton
                   label="Share project link"
-                  icon={<ClipboardIcon />}
+                  icon={<Share size={16} />}
                   onPress={onShareProjectLinkPress}
                   description={projectLinkClipboard.hasCopied ? 'Copied!' : undefined}
                   showArrow
                 />
                 <SettingsRowButton
                   label="Hide menu button"
-                  icon={<DebugIcon />}
-                  onPress={onHideMenuButtonPress}
+                  icon={<EyeOff size={16} />}
+                  onPress={actions.closeDevMenu}
                   showArrow
                 />
                 {isDevLauncherInstalled && (
                   <>
                     <SettingsRowButton
                       label="Go home"
-                      icon={<HomeFilledIcon tintColor={lightTheme.icon.default} />}
+                      icon={<House size={16} />}
                       onPress={actions.navigateToLauncher}
                       showArrow
                     />
@@ -177,3 +174,15 @@ function SettingsRowButton({
     </Button.FadeOnPressContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  headerTitle: {
+    height: 25,
+    fontSize: 22,
+    fontWeight: '600',
+    lineHeight: 25,
+    textAlign: 'center',
+    letterSpacing: -0.45,
+    color: '#000000',
+  },
+});

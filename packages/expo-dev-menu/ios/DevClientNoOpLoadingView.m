@@ -8,7 +8,7 @@
 
 + (NSString *)moduleName
 {
-  return @"DevLoadingView";
+  return @"DevLoadingView1";
 }
 
 + (void)setEnabled:(BOOL)enabled {}

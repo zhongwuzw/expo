@@ -57,6 +57,10 @@ export function useDevSettings() {
     DevMenu.closeMenu();
   }, []);
 
+  const closeDevMenu = React.useCallback(async () => {
+    DevMenu.closeMenu();
+  }, []);
+
   const toggleFastRefresh = React.useCallback(async () => {
     eagerToggleValue('isHotLoadingEnabled');
     await DevMenu.toggleFastRefreshAsync();
@@ -98,6 +102,7 @@ export function useDevSettings() {
       navigateToLauncher,
       openRNDevMenu,
       openJSInspector,
+      closeDevMenu,
     },
   };
 }

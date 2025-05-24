@@ -46,7 +46,9 @@
     ]
   },
   "dependencies": {
-    "expo-dev-menu-interface": "1.10.0"
+    "expo-dev-menu-interface": "1.10.0",
+    "lucide-react-native": "^0.511.0",
+    "react-native-svg": "^15.11.2"
   },
   "devDependencies": {
     "@apollo/client": "^3.4.10",
