@@ -27,11 +27,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/expo/expo.git",
+    "url": "https://github.com/zhongwuzw/expo.git",
     "directory": "packages/expo-dev-menu"
   },
   "bugs": {
-    "url": "https://github.com/expo/expo/issues"
+    "url": "https://github.com/zhongwuzw/expo/issues"
   },
   "author": "650 Industries, Inc.",
   "license": "MIT",
