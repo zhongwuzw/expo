@@ -52,17 +52,17 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
   }
 
   return (
-    <View flex="1" style={{backgroundColor: "#0000000D"}}>
+    <View flex="1" style={styles.container}>
       {/*Use default edges for android, do not enable for iOS*/}
-      <SafeAreaView style={{ flex: 1 }} edges={Platform.OS === 'android' ? undefined : []}>
-        <View style={{paddingVertical: 6, borderTopLeftRadius: 10, borderTopRightRadius: 10}} alignItems="center">
-          <View style={{width: 35, height: 4, backgroundColor: '#00000033', borderRadius: 2, marginBottom: 10}} />
-          <Row align="start" style={{paddingHorizontal: 16}}>
+      <SafeAreaView style={styles.safeArea} edges={Platform.OS === 'android' ? undefined : []}>
+        <View style={styles.headerContainer} alignItems="center">
+          <View style={styles.headerIndicator} />
+          <Row align="start" style={styles.headerRow}>
             {/* <Spacer.Horizontal size="medium" /> */}
             <Row align="center" shrink="1">
               {/* <Spacer.Horizontal size="small" /> */}
               <View shrink="1">
-                <Row style={{ flexWrap: 'wrap' }}>
+                <Row style={styles.appNameRow}>
                   <Text style={styles.headerTitle} numberOfLines={1}>
                     {appInfo?.appName}
                   </Text>
@@ -70,10 +70,10 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
               </View>
               <Spacer.Horizontal />
               <View alignItems="center"
-            justifyContent="center" style={{backgroundColor:"#FAFAFA", width: 30, height: 30, borderRadius: 15}}>
+            justifyContent="center" style={styles.closeButtonContainer}>
                 <Button.FadeOnPressContainer onPress={hideMenu}>
                   <View>
-                    <XIcon style={{width:16, height:16}}/>
+                    <XIcon style={styles.closeIcon}/>
                   </View>
                 </Button.FadeOnPressContainer>
               </View>
@@ -113,11 +113,11 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
             </View>
           </ScrollView>
         </View>
-        <View style={{paddingHorizontal: 12, paddingTop:10}}>
+        <View style={styles.footerContainer}>
             <Row align="center">
               <Info size={16} color="#838383" />
               <Spacer.Horizontal size="small" />
-              <Text style={{fontWeight:'400', fontSize:16, color:"#4D4D4D"}}>Shake device to open this menu</Text>
+              <Text style={styles.footerText}>Shake device to open this menu</Text>
             </Row>
           </View>
       </SafeAreaView>
@@ -143,13 +143,13 @@ function SettingsRowButton({
 }: SettingsRowButtonProps & { showArrow?: boolean }) {
   return (
     <Button.FadeOnPressContainer onPress={onPress} bg="default" disabled={disabled}>
-      <Row padding="small" align="center" bg="default" style={{ opacity: disabled ? 0.75 : 1 }}>
+      <Row padding="small" align="center" bg="default" style={[styles.settingsRow, disabled && styles.settingsRowDisabled]}>
         {icon && (
           <View
             // bg="secondary"
             alignItems="center"
             justifyContent="center"
-            style={{ marginRight: scale.small, width: 36, height: 36, borderRadius: 8 , backgroundColor: "#EFEFF0"}}>
+            style={styles.settingsRowIconContainer}>
             {icon}
           </View>
         )}
@@ -157,23 +157,94 @@ function SettingsRowButton({
         {/* <Spacer.Horizontal style={{ width: 0, flex: 0 }} /> */}
 
         <View>
-          <Text style={{ fontSize: 16, fontWeight: '500', color: '#4D4D4D' }}>{label}</Text>
+          <Text style={styles.settingsRowLabel}>{label}</Text>
         </View>
 
         <Spacer.Horizontal />
 
         {showArrow && (
-          <View width="large" style={{ alignItems: 'flex-end' }}>
+          <View width="large" style={styles.settingsRowArrowContainer}>
             <Ionicons name="chevron-forward" size={{ width: 7.5, height: 13.12 }} color="#838383" />
           </View>
         )}
-        {!showArrow && <View width="16" style={{ alignItems: 'flex-end' }} />}
+        {!showArrow && <View width="16" style={styles.settingsRowNoArrowContainer} />}
       </Row>
     </Button.FadeOnPressContainer>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#0000000D',
+  },
+  safeArea: {
+    flex: 1,
+  },
+  headerContainer: {
+    paddingVertical: 6,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  headerIndicator: {
+    width: 35,
+    height: 4,
+    backgroundColor: '#00000033',
+    borderRadius: 2,
+    marginBottom: 10,
+  },
+  headerRow: {
+    paddingHorizontal: 16,
+  },
+  appNameRow: {
+    flexWrap: 'wrap',
+  },
+  closeButtonContainer: {
+    backgroundColor: "#FAFAFA",
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center', // Added for centering icon
+    justifyContent: 'center', // Added for centering icon
+  },
+  closeIcon: {
+    width: 16,
+    height: 16,
+  },
+  footerContainer: {
+    paddingHorizontal: 12,
+    paddingTop: 10,
+  },
+  footerText: {
+    fontWeight: '400',
+    fontSize: 16,
+    color: "#4D4D4D",
+  },
+  settingsRow: {
+    // opacity will be handled by settingsRowDisabled
+  },
+  settingsRowDisabled: {
+    opacity: 0.75,
+  },
+  settingsRowIconContainer: {
+    marginRight: scale.small,
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: "#EFEFF0",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  settingsRowLabel: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#4D4D4D',
+  },
+  settingsRowArrowContainer: {
+    alignItems: 'flex-end',
+  },
+  settingsRowNoArrowContainer: {
+    alignItems: 'flex-end',
+  },
   headerTitle: {
     height: 25,
     fontSize: 22,
