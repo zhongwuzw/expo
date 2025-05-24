@@ -68,10 +68,11 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
                 </Row>
               </View>
               <Spacer.Horizontal />
-              <View width="large" style={{ alignSelf: 'flex-start' }}>
-                <Button.FadeOnPressContainer onPress={hideMenu} bg="ghost" rounded="full">
-                  <View padding="micro">
-                    <XIcon />
+              <View alignItems="center"
+            justifyContent="center" style={{backgroundColor:"#FAFAFA", width: 30, height: 30, borderRadius: 15}}>
+                <Button.FadeOnPressContainer onPress={hideMenu}>
+                  <View>
+                    <XIcon style={{width:16, height:16}}/>
                   </View>
                 </Button.FadeOnPressContainer>
               </View>
@@ -137,49 +138,29 @@ function SettingsRowButton({
       <Row padding="small" align="center" bg="default" style={{ opacity: disabled ? 0.75 : 1 }}>
         {icon && (
           <View
-            width="large"
-            height="large"
-            bg="secondary"
-            rounded="medium"
+            // bg="secondary"
             alignItems="center"
             justifyContent="center"
-            style={{ marginRight: scale.small }}>
+            style={{ marginRight: scale.small, width: 36, height: 36, borderRadius: 8 , backgroundColor: "#EFEFF0"}}>
             {icon}
           </View>
         )}
 
-        <Spacer.Horizontal size="small" />
+        {/* <Spacer.Horizontal style={{ width: 0, flex: 0 }} /> */}
 
         <View>
-          <Text>{label}</Text>
+          <Text style={{ fontSize: 16, fontWeight: '500', color: '#4D4D4D' }}>{label}</Text>
         </View>
 
         <Spacer.Horizontal />
 
         {showArrow && (
           <View width="large" style={{ alignItems: 'flex-end' }}>
-            <Ionicons name="chevron-forward" size={{ width: 7.5, height: 13.13 }} color="#838383" />
+            <Ionicons name="chevron-forward" size={{ width: 7.5, height: 13.12 }} color="#838383" />
           </View>
         )}
         {!showArrow && <View width="16" style={{ alignItems: 'flex-end' }} />}
       </Row>
-
-      {Boolean(description) && (
-        <View style={{ transform: [{ translateY: -scale['3'] }] }}>
-          <Row px="small" align="center">
-            <Spacer.Horizontal size="large" />
-
-            <View shrink="1" px="small">
-              <Text size="small" color="secondary" leading="large">
-                {description}
-              </Text>
-            </View>
-
-            <View width="16" />
-          </Row>
-          <Spacer.Vertical size="tiny" />
-        </View>
-      )}
     </Button.FadeOnPressContainer>
   );
 }
