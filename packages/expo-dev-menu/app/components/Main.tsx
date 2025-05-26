@@ -47,7 +47,19 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
 
   function onShareProjectLinkPress() {
     if (appInfo?.hostUrl) {
-      projectLinkClipboard.onCopyPress(appInfo.hostUrl);
+      let urlToCopy = appInfo.hostUrl;
+
+      if (urlToCopy.includes('rork.app')) {
+        try {
+          const url = new URL(urlToCopy);
+          url.protocol = 'https:';
+          urlToCopy = url.toString();
+        } catch {
+          urlToCopy = urlToCopy.replace(/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//, 'https://');
+        }
+      }
+
+      projectLinkClipboard.onCopyPress(urlToCopy);
     }
   }
 
@@ -69,11 +81,10 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
                 </Row>
               </View>
               <Spacer.Horizontal />
-              <View alignItems="center"
-            justifyContent="center" style={styles.closeButtonContainer}>
+              <View alignItems="center" justifyContent="center" style={styles.closeButtonContainer}>
                 <Button.FadeOnPressContainer onPress={hideMenu}>
                   <View>
-                    <XIcon style={styles.closeIcon}/>
+                    <XIcon style={styles.closeIcon} />
                   </View>
                 </Button.FadeOnPressContainer>
               </View>
@@ -81,11 +92,16 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
             </Row>
           </Row>
         </View>
-        <View >
+        <View>
           <ScrollView nestedScrollEnabled>
             <View margin="small">
               <View bg="default" rounded="large" overflow="hidden">
-                <SettingsRowButton label="Reload" icon={<RefreshCcw size={16} />} onPress={actions.reload} showArrow />
+                <SettingsRowButton
+                  label="Reload"
+                  icon={<RefreshCcw size={16} />}
+                  onPress={actions.reload}
+                  showArrow
+                />
                 <SettingsRowButton
                   label="Share project link"
                   icon={<Share size={16} />}
@@ -114,12 +130,12 @@ export function Main({ registeredCallbacks = [], isDevice }: MainProps) {
           </ScrollView>
         </View>
         <View style={styles.footerContainer}>
-            <Row align="center">
-              <Info size={16} color="#838383" />
-              <Spacer.Horizontal size="small" />
-              <Text style={styles.footerText}>Shake device to open this menu</Text>
-            </Row>
-          </View>
+          <Row align="center">
+            <Info size={16} color="#838383" />
+            <Spacer.Horizontal size="small" />
+            <Text style={styles.footerText}>Shake device to open this menu</Text>
+          </Row>
+        </View>
       </SafeAreaView>
     </View>
   );
@@ -139,11 +155,15 @@ function SettingsRowButton({
   description = '',
   onPress,
   disabled,
-  showArrow
+  showArrow,
 }: SettingsRowButtonProps & { showArrow?: boolean }) {
   return (
     <Button.FadeOnPressContainer onPress={onPress} bg="default" disabled={disabled}>
-      <Row padding="small" align="center" bg="default" style={[styles.settingsRow, disabled && styles.settingsRowDisabled]}>
+      <Row
+        padding="small"
+        align="center"
+        bg="default"
+        style={[styles.settingsRow, disabled && styles.settingsRowDisabled]}>
         {icon && (
           <View
             // bg="secondary"
@@ -199,7 +219,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   closeButtonContainer: {
-    backgroundColor: "#FAFAFA",
+    backgroundColor: '#FAFAFA',
     width: 30,
     height: 30,
     borderRadius: 15,
@@ -217,7 +237,7 @@ const styles = StyleSheet.create({
   footerText: {
     fontWeight: '400',
     fontSize: 16,
-    color: "#4D4D4D",
+    color: '#4D4D4D',
   },
   settingsRow: {
     // opacity will be handled by settingsRowDisabled
@@ -230,7 +250,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 8,
-    backgroundColor: "#EFEFF0",
+    backgroundColor: '#EFEFF0',
     alignItems: 'center',
     justifyContent: 'center',
   },
